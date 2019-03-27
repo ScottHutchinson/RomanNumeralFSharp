@@ -5,30 +5,6 @@ open NUnit.Framework
 open System
 open System.Reflection
 
-let sum a b = a + b
-
-let repeatChar ch times = String.replicate times ch
-    
-let getChar (str: string) idx = string (str.[idx])
-
-let rec romanNumeralForDigit digit (numeralOneFiveTen: string) =
-    match digit with
-    | d when d < 0 -> ""
-    | 1 | 2 | 3 -> repeatChar (getChar numeralOneFiveTen 0) digit
-    | 4 -> (getChar numeralOneFiveTen 0) + (getChar numeralOneFiveTen 1)
-    | 5 | 6 | 7 | 8 -> (getChar numeralOneFiveTen 1) + (romanNumeralForDigit (digit - 5) numeralOneFiveTen)
-    | _ -> (getChar numeralOneFiveTen 0) + (getChar numeralOneFiveTen 2)
-    
-let rec romanNumeralRecursive (value: int) (numerals: string) =
-    match value with
-    | 0 -> ""
-    | _ -> 
-        let bigPart = romanNumeralRecursive (value / 10) (numerals.[2..])
-        let smallPart = romanNumeralRecursive (value % 10) numerals
-        bigPart + smallPart
-    
-let romanNumeral value = romanNumeralRecursive value "IVXLCDM??"
-
 let units =
     [1000, "M"
      900, "CM"
@@ -44,37 +20,24 @@ let units =
      4, "IV"
      1, "I"]
 
-let rec toRomanNumeral = function
-    | 0 -> ""
-    | n ->
-        let x, s = units |> List.find (fun (x, _) -> x <= n)
-        s + toRomanNumeral (n-x)
+let toRomanNumeral n =
+    let rec iter acc n =
+        match n with
+        | 0 -> acc
+        | n ->
+            let x, s = units |> List.find (fun (x, _) -> x <= n)
+            iter (acc + s) (n-x)
         
+    iter "" n
+
 let test value expected =
     let actual = toRomanNumeral value
     Assert.AreEqual(expected, actual)
-
-[<Test>]
-let testRomanNumeralForDigit () =
-    let expected = "IX"
-    let actual = romanNumeralForDigit 9 "IVXLCDM??"
-    Assert.AreEqual(expected, actual)
-    
-[<Test>]
-let testRepeatChar () =
-    let expected = "III"
-    let actual = repeatChar "I" 3
-    Assert.AreEqual(expected, actual)
         
 [<Test>]
-let testRomanNumerals () =
+let ``Integers are correctly encoded as Roman Numerals`` () =
     test 10 "X"
-    
-[<Test>]
-let testSum () = 
-    let expected = 2 + 2
-    let actual = sum 2 2
-    Assert.AreEqual(expected, actual)
+    test 1963 "MCMLXIII"
 
 [<EntryPoint>]
 let main argv =
