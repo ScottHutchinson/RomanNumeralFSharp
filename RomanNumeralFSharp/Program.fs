@@ -52,19 +52,19 @@ let rec toRomanNumeral = function
         
 let test value expected =
     let actual = toRomanNumeral value
-    Assert.That(actual, Is.EqualTo(expected))
+    Assert.AreEqual(expected, actual)
 
 [<Test>]
 let testRomanNumeralForDigit () =
     let expected = "IX"
     let actual = romanNumeralForDigit 9 "IVXLCDM??"
-    Assert.That(actual, Is.EqualTo(expected))
+    Assert.AreEqual(expected, actual)
     
 [<Test>]
 let testRepeatChar () =
     let expected = "III"
     let actual = repeatChar "I" 3
-    Assert.That(actual, Is.EqualTo(expected))
+    Assert.AreEqual(expected, actual)
         
 [<Test>]
 let testRomanNumerals () =
@@ -74,7 +74,7 @@ let testRomanNumerals () =
 let testSum () = 
     let expected = 2 + 2
     let actual = sum 2 2
-    Assert.That(actual, Is.EqualTo(expected))
+    Assert.AreEqual(expected, actual)
 
 [<EntryPoint>]
 let main argv =
