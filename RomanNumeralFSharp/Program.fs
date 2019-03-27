@@ -47,7 +47,7 @@ let units =
 let rec toRomanNumeral = function
     | 0 -> ""
     | n ->
-        let x, s = units |> List.find (fun (x,s) -> x <= n)
+        let x, s = units |> List.find (fun (x, _) -> x <= n)
         s + toRomanNumeral (n-x)
         
 let test value expected =
