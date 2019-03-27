@@ -1,7 +1,5 @@
-﻿module Solution
+﻿module RomanNumeralFSharp
 
-open NUnitLite
-open NUnit.Framework
 open System
 open System.Reflection
 
@@ -30,19 +28,8 @@ let toRomanNumeral n =
             getNextPart (acc + s) (n-x)
         
     getNextPart "" n
-
-let test value expected =
-    let actual = toRomanNumeral value
-    Assert.AreEqual(expected, actual)
-        
-[<Test>]
-let ``Integers are correctly encoded as Roman Numerals`` () =
-    test 10 "X"
-    test 1963 "MCMLXIII"
-
 [<EntryPoint>]
 let main argv =
     printfn "Hello, World!"
-    (new AutoRun(Assembly.GetCallingAssembly())).Execute( [| "--labels=All" |]) |> ignore
     Console.ReadLine() |> ignore
     0
